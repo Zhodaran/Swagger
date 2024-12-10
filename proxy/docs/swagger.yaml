@@ -1,0 +1,9 @@
+basePath: /api
+host: localhost:8080
+info:
+  contact: {}
+  description: Этот эндпоинт позволяет получить адрес по наименованию
+  title: Address API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
