@@ -7,8 +7,11 @@ import (
 	"io"
 	"net/http"
 
+	_ "proxy/docs" // Импортируйте сгенерированные документы
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 // @title Address API
@@ -17,10 +20,13 @@ import (
 // @host localhost:8080
 // @BasePath /api
 
-// @RequestAddressSearch представляет запрос для поиска
+// RequestAddressSearch представляет запрос для поиска
 // @Description Этот эндпоинт позволяет получить адрес по наименованию
-// @Param address body ResponseAddress true "Географические координаты"
-
+// @Param address body RequestAddressSearch true "Географические координаты"
+// @Success 200 {object} ResponseAddress
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /address/geocode [post]
 type RequestAddressSearch struct {
 	Query string `json:"query"`
 }
@@ -84,7 +90,7 @@ func getGeoCoordinates(query string) (string, error) {
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
 	r.Post("/api/address/geocode", func(w http.ResponseWriter, r *http.Request) {
 		geo, err := getGeoCoordinates("москва сухонская 11") // Здесь можно передать запрос из тела
 		if err != nil {

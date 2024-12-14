@@ -2,7 +2,7 @@ basePath: /api
 host: localhost:8080
 info:
   contact: {}
-  description: Этот эндпоинт позволяет получить адрес по наименованию
+  description: API для поиска
   title: Address API
   version: "1.0"
 paths: {}

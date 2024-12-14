@@ -22,7 +22,7 @@ services:
     environment:
       - SWAGGER_JSON=/swagger.yaml
     volumes:
-      - .proxy/docs/swagger.yaml:/swagger.yaml
+      - ./proxy/docs/swagger.yaml:/swagger.yaml
     networks:
       - mylocal
 

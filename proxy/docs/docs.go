@@ -24,7 +24,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Address API",
-	Description:      "Этот эндпоинт позволяет получить адрес по наименованию",
+	Description:      "API для поиска",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

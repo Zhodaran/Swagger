@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Этот эндпоинт позволяет получить адрес по наименованию",
+        "description": "API для поиска",
         "title": "Address API",
         "contact": {},
         "version": "1.0"
