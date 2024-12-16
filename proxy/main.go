@@ -14,19 +14,20 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-// @title Address API
+// @title Swagger Example API
 // @version 1.0
-// @description API для поиска
-// @host localhost:8080
-// @BasePath /api
+// @description This is a sample server Petstore server.
+// @termsOfService http://swagger.io/terms/
 
-// RequestAddressSearch представляет запрос для поиска
-// @Description Этот эндпоинт позволяет получить адрес по наименованию
-// @Param address body RequestAddressSearch true "Географические координаты"
-// @Success 200 {object} ResponseAddress
-// @Failure 400 {object} ErrorResponse
-// @Failure 404 {object} ErrorResponse
-// @Router /address/geocode [post]
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host petstore.swagger.io
+// @BasePath /v2
 type RequestAddressSearch struct {
 	Query string `json:"query"`
 }
@@ -42,11 +43,19 @@ type ResponseAddress struct {
 	} `json:"suggestions"`
 }
 
+// ErrorResponse представляет ответ с ошибкой
+// @Description Ошибка, возникающая при обработке запроса
+// @Success 400 {object} ErrorResponse
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
+
+// @Summary Get Geo Coordinates
+// @Description This endpoint allows you to get geo coordinates by address
+// @Param address body RequestAddressSearch true "Address search query"
 // @Success 200 {object} ResponseAddress
 // @Failure 400 {object} ErrorResponse
-// @Failure 404 {object} ErrorResponse
-// Логика геокодирования
-
+// @Router /api/address/geocode [post]
 func getGeoCoordinates(query string) (string, error) {
 	url := "http://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address"
 	reqData := map[string]string{"query": query}

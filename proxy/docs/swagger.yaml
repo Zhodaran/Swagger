@@ -1,9 +1,65 @@
-basePath: /api
-host: localhost:8080
+basePath: /v2
+definitions:
+  main.ErrorResponse:
+    description: Ошибка, возникающая при обработке запроса
+    properties:
+      message:
+        type: string
+    type: object
+  main.RequestAddressSearch:
+    properties:
+      query:
+        type: string
+    type: object
+  main.ResponseAddress:
+    properties:
+      suggestions:
+        items:
+          properties:
+            data:
+              $ref: '#/definitions/main.ResponseAddresses'
+          type: object
+        type: array
+    type: object
+  main.ResponseAddresses:
+    properties:
+      geo_lat:
+        type: string
+      geo_lon:
+        type: string
+    type: object
+host: petstore.swagger.io
 info:
-  contact: {}
-  description: API для поиска
-  title: Address API
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server Petstore server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
   version: "1.0"
-paths: {}
+paths:
+  /api/address/geocode:
+    post:
+      description: This endpoint allows you to get geo coordinates by address
+      parameters:
+      - description: Address search query
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/main.RequestAddressSearch'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ResponseAddress'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Get Geo Coordinates
 swagger: "2.0"
