@@ -41,13 +41,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Успешное выполнение",
                         "schema": {
                             "$ref": "#/definitions/main.ResponseAddress"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Ошибка запроса",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка подключения к серверу",
                         "schema": {
                             "$ref": "#/definitions/main.ErrorResponse"
                         }
@@ -61,7 +67,13 @@ const docTemplate = `{
             "description": "Ошибка, возникающая при обработке запроса",
             "type": "object",
             "properties": {
-                "message": {
+                "200": {
+                    "type": "string"
+                },
+                "400": {
+                    "type": "string"
+                },
+                "500": {
                     "type": "string"
                 }
             }

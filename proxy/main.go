@@ -47,15 +47,18 @@ type ResponseAddress struct {
 // @Description Ошибка, возникающая при обработке запроса
 // @Success 400 {object} ErrorResponse
 type ErrorResponse struct {
-	Message string `json:"message"`
+	BadRequest      string `json:"400"`
+	DadataBad       string `json:"500"`
+	SuccefulRequest string `json:"200"`
 }
 
 // @Summary Get Geo Coordinates
 // @Description This endpoint allows you to get geo coordinates by address
 // @Param address body RequestAddressSearch true "Address search query"
-// @Success 200 {object} ResponseAddress
-// @Failure 400 {object} ErrorResponse
 // @Router /api/address/geocode [post]
+// @Success 200 {object} ResponseAddress "Успешное выполнение"
+// @Success 400 {object} ErrorResponse "Ошибка запроса"
+// @Success 500 {object} ErrorResponse "Ошибка подключения к серверу"
 func getGeoCoordinates(query string) (string, error) {
 	url := "http://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address"
 	reqData := map[string]string{"query": query}
