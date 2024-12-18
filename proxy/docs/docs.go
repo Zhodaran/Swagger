@@ -60,6 +60,43 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/address/search": {
+            "post": {
+                "description": "This endpoint allows you to get geo coordinates by address",
+                "summary": "Get Geo Coordinates",
+                "parameters": [
+                    {
+                        "description": "Address search query",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.RequestAddressSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное выполнение",
+                        "schema": {
+                            "$ref": "#/definitions/main.ResponseAddress"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка запроса",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка подключения к серверу",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
