@@ -1,5 +1,17 @@
-basePath: /v2
 definitions:
+  main.Address:
+    properties:
+      city:
+        type: string
+      house:
+        type: string
+      lat:
+        type: string
+      lon:
+        type: string
+      street:
+        type: string
+    type: object
   main.ErrorResponse:
     description: Ошибка, возникающая при обработке запроса
     properties:
@@ -21,29 +33,15 @@ definitions:
         items:
           properties:
             data:
-              $ref: '#/definitions/main.ResponseAddresses'
+              $ref: '#/definitions/main.Address'
           type: object
         type: array
     type: object
-  main.ResponseAddresses:
-    properties:
-      geo_lat:
-        type: string
-      geo_lon:
-        type: string
-    type: object
-host: petstore.swagger.io
+host: localhost:8080
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server Petstore server.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  contact: {}
+  description: Этот эндпоинт позволяет получить адрес по наименованию
+  title: Address API
   version: "1.0"
 paths:
   /api/address/geocode:

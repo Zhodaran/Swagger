@@ -9,16 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -100,6 +91,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "main.Address": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "house": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "string"
+                },
+                "lon": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
         "main.ErrorResponse": {
             "description": "Ошибка, возникающая при обработке запроса",
             "type": "object",
@@ -132,21 +143,10 @@ const docTemplate = `{
                         "type": "object",
                         "properties": {
                             "data": {
-                                "$ref": "#/definitions/main.ResponseAddresses"
+                                "$ref": "#/definitions/main.Address"
                             }
                         }
                     }
-                }
-            }
-        },
-        "main.ResponseAddresses": {
-            "type": "object",
-            "properties": {
-                "geo_lat": {
-                    "type": "string"
-                },
-                "geo_lon": {
-                    "type": "string"
                 }
             }
         }
@@ -156,11 +156,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "petstore.swagger.io",
-	BasePath:         "/v2",
+	Host:             "localhost:8080",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Swagger Example API",
-	Description:      "This is a sample server Petstore server.",
+	Title:            "Address API",
+	Description:      "Этот эндпоинт позволяет получить адрес по наименованию",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
