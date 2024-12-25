@@ -49,8 +49,8 @@ type Address struct {
 	City   string `json:"city"`
 	Street string `json:"street"`
 	House  string `json:"house"`
-	Lat    string `json:"lat"`
-	Lon    string `json:"lon"`
+	Lat    string `json:"geo_lat"`
+	Lon    string `json:"geo_lon"`
 }
 
 func (g *GeoService) AddressSearch(input string) ([]*Address, error) {

@@ -21,12 +21,12 @@ const docTemplate = `{
                 "summary": "Get Geo Coordinates",
                 "parameters": [
                     {
-                        "description": "Address search query",
+                        "description": "Address search lat lng",
                         "name": "address",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.RequestAddressSearch"
+                            "$ref": "#/definitions/main.GeocodeRequest"
                         }
                     }
                 ],
@@ -97,13 +97,13 @@ const docTemplate = `{
                 "city": {
                     "type": "string"
                 },
+                "geo_lat": {
+                    "type": "string"
+                },
+                "geo_lon": {
+                    "type": "string"
+                },
                 "house": {
-                    "type": "string"
-                },
-                "lat": {
-                    "type": "string"
-                },
-                "lon": {
                     "type": "string"
                 },
                 "street": {
@@ -123,6 +123,17 @@ const docTemplate = `{
                 },
                 "500": {
                     "type": "string"
+                }
+            }
+        },
+        "main.GeocodeRequest": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
                 }
             }
         },
@@ -160,7 +171,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Address API",
-	Description:      "Этот эндпоинт позволяет получить адрес по наименованию",
+	Description:      "Этот эндпоинт позволяет получить адрес по геоданным",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

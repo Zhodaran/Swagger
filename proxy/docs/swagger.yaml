@@ -3,11 +3,11 @@ definitions:
     properties:
       city:
         type: string
+      geo_lat:
+        type: string
+      geo_lon:
+        type: string
       house:
-        type: string
-      lat:
-        type: string
-      lon:
         type: string
       street:
         type: string
@@ -21,6 +21,13 @@ definitions:
         type: string
       "500":
         type: string
+    type: object
+  main.GeocodeRequest:
+    properties:
+      lat:
+        type: number
+      lng:
+        type: number
     type: object
   main.RequestAddressSearch:
     properties:
@@ -40,7 +47,7 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: Этот эндпоинт позволяет получить адрес по наименованию
+  description: Этот эндпоинт позволяет получить адрес по геоданным
   title: Address API
   version: "1.0"
 paths:
@@ -48,12 +55,12 @@ paths:
     post:
       description: This endpoint allows you to get geo coordinates by address
       parameters:
-      - description: Address search query
+      - description: Address search lat lng
         in: body
         name: address
         required: true
         schema:
-          $ref: '#/definitions/main.RequestAddressSearch'
+          $ref: '#/definitions/main.GeocodeRequest'
       responses:
         "200":
           description: Успешное выполнение

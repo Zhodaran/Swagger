@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Этот эндпоинт позволяет получить адрес по наименованию",
+        "description": "Этот эндпоинт позволяет получить адрес по геоданным",
         "title": "Address API",
         "contact": {},
         "version": "1.0"
@@ -14,12 +14,12 @@
                 "summary": "Get Geo Coordinates",
                 "parameters": [
                     {
-                        "description": "Address search query",
+                        "description": "Address search lat lng",
                         "name": "address",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.RequestAddressSearch"
+                            "$ref": "#/definitions/main.GeocodeRequest"
                         }
                     }
                 ],
@@ -90,13 +90,13 @@
                 "city": {
                     "type": "string"
                 },
+                "geo_lat": {
+                    "type": "string"
+                },
+                "geo_lon": {
+                    "type": "string"
+                },
                 "house": {
-                    "type": "string"
-                },
-                "lat": {
-                    "type": "string"
-                },
-                "lon": {
                     "type": "string"
                 },
                 "street": {
@@ -116,6 +116,17 @@
                 },
                 "500": {
                     "type": "string"
+                }
+            }
+        },
+        "main.GeocodeRequest": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
                 }
             }
         },

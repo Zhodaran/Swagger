@@ -34,6 +34,15 @@ import (
 // @Description Этот эндпоинт позволяет получить адрес по наименованию
 // @Param address body ResponseAddress true "Географические координаты"
 
+// @GeocodeRequest представляет запрос по геоданным для поиска
+// @Description Этот эндпоинт позволяет получить адрес по геоданным
+// @Param address body ResponseAddress true "Географические координаты"
+
+type GeocodeRequest struct {
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
+}
+
 type RequestAddressSearch struct {
 	Query string `json:"query"`
 }
@@ -118,16 +127,70 @@ func Login(w http.ResponseWriter, r *http.Request) {
 // @Summary Get Geo Coordinates
 // @Description This endpoint allows you to get geo coordinates by address
 // @Param address body RequestAddressSearch true "Address search query"
-// @Router /api/address/geocode [post]
 // @Router /api/address/search [post]
 // @Success 200 {object} ResponseAddress "Успешное выполнение"
 // @Success 400 {object} ErrorResponse "Ошибка запроса"
 // @Success 500 {object} ErrorResponse "Ошибка подключения к серверу"
-func GetGeoCoordinates(query string) (ResponseAddresses, error) {
+func GetGeoCoordinatesAddress(query string) (ResponseAddresses, error) {
 	url := "http://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address"
 	reqData := map[string]string{"query": query}
 
 	jsonData, err := json.Marshal(reqData)
+	if err != nil {
+		return ResponseAddresses{}, err
+	}
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return ResponseAddresses{}, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "token d9e0649452a137b73d941aa4fb4fcac859372c8c")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return ResponseAddresses{}, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return ResponseAddresses{}, err
+	}
+
+	var response ResponseAddress
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return ResponseAddresses{}, err
+	}
+
+	var addresses ResponseAddresses
+	for _, suggestion := range response.Suggestions {
+		address := &Address{
+			City:   suggestion.Address.City,
+			Street: suggestion.Address.Street,
+			House:  suggestion.Address.House,
+			Lat:    suggestion.Address.Lat,
+			Lon:    suggestion.Address.Lon,
+		}
+		addresses.Addresses = append(addresses.Addresses, address)
+	}
+
+	return addresses, nil
+}
+
+// @Summary Get Geo Coordinates
+// @Description This endpoint allows you to get geo coordinates by address
+// @Param address body GeocodeRequest true "Address search lat lng"
+// @Router /api/address/geocode [post]
+// @Success 200 {object} ResponseAddress "Успешное выполнение"
+// @Success 400 {object} ErrorResponse "Ошибка запроса"
+// @Success 500 {object} ErrorResponse "Ошибка подключения к серверу"
+func GetGeoCoordinatesGeocode(Lat float64, Lng float64) (ResponseAddresses, error) {
+	url := "http://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address"
+	data := map[string]float64{"lat": Lat, "lon": Lng}
+
+	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return ResponseAddresses{}, err
 	}
@@ -187,13 +250,13 @@ func main() {
 		r.Post("/api/register", Register)
 		r.Post("/api/login", Login)
 		r.Post("/api/address/geocode", func(w http.ResponseWriter, r *http.Request) {
-			var req RequestAddressSearch
+			var req GeocodeRequest
 			if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 
-			geo, err := GetGeoCoordinates(req.Query) // Здесь можно передать запрос из тела
+			geo, err := GetGeoCoordinatesGeocode(req.Lat, req.Lng) // Здесь можно передать запрос из тела
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -213,7 +276,7 @@ func main() {
 				return
 			}
 
-			geo, err := GetGeoCoordinates(req.Query) // Здесь можно передать запрос из тела
+			geo, err := GetGeoCoordinatesAddress(req.Query) // Здесь можно передать запрос из тела
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
